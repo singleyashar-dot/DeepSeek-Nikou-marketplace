@@ -33,7 +33,7 @@ export async function GET(req: Request) {
       orderBy: { createdAt: 'desc' }
     });
 
-    const formattedRequests = requests.map((req: any) => { // 👈 اینجا any اضافه شد
+    const formattedRequests = requests.map((req: any) => { // 👈 any اضافه شد
       return {
         id: req.id,
         title: req.title,
