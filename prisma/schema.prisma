@@ -300,7 +300,7 @@ model SupportTicket {
 }
 
 // ==========================================
-// ۵. لایه ارتباطات و شهرها
+// ۵. لایه ارتباطات، شهرها و تنظیمات
 // ==========================================
 model Message {
   id         String   @id @default(uuid())
@@ -316,4 +316,13 @@ model City {
   id        String   @id @default(uuid())
   name      String   @unique
   createdAt DateTime @default(now())
+}
+
+// 👈 جدول جدید تنظیمات که خطا داشت
+model Setting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

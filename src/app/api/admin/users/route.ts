@@ -14,8 +14,8 @@ export async function GET() {
       orderBy: { createdAt: 'desc' }
     });
 
-    const formattedUsers = users.map(user => {
-      const hasVerified = user.verifications.some(v => v.status === 'VERIFIED');
+    const formattedUsers = users.map((user: any) => { // 👈 اینجا any اضافه شد
+      const hasVerified = user.verifications.some((v: any) => v.status === 'VERIFIED'); // 👈 اینجا هم any اضافه شد
       const isUserVerified = user.profile?.isVerified === true || hasVerified;
 
       return {

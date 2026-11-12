@@ -17,7 +17,7 @@ export async function GET(req: Request) {
     const requests = await prisma.request.findMany({
       where: whereClause,
       include: {
-        category: true, // 👈 اضافه شد
+        category: true,
         buyer: { include: { profile: true } },
         matches: {
           include: {
@@ -33,18 +33,20 @@ export async function GET(req: Request) {
       orderBy: { createdAt: 'desc' }
     });
 
-    const formattedRequests = requests.map(req => ({
-      id: req.id,
-      title: req.title,
-      description: req.description,
-      quantity: req.quantity,
-      unit: req.unit,
-      categoryId: req.categoryId, // 👈 اضافه شد
-      categoryName: req.category?.title || 'عمومی', // 👈 اضافه شد
-      createdAt: req.createdAt,
-      buyerName: req.buyer.profile?.displayName || req.buyer.email.split('@')[0] || 'خریدار نیکو',
-      matches: req.matches 
-    }));
+    const formattedRequests = requests.map((req: any) => { // 👈 اینجا any اضافه شد
+      return {
+        id: req.id,
+        title: req.title,
+        description: req.description,
+        quantity: req.quantity,
+        unit: req.unit,
+        categoryId: req.categoryId,
+        categoryName: req.category?.title || 'عمومی',
+        createdAt: req.createdAt,
+        buyerName: req.buyer.profile?.displayName || req.buyer.email.split('@')[0] || 'خریدار نیکو',
+        matches: req.matches 
+      };
+    });
 
     return NextResponse.json(formattedRequests, {
       headers: { 'Cache-Control': 'no-store, max-age=0' }
@@ -57,7 +59,7 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { title, description, quantity, unit, buyerId, categoryId } = body; // 👈 اضافه شد
+    const { title, description, quantity, unit, buyerId, categoryId } = body;
 
     if (!title || !buyerId) {
       return NextResponse.json({ error: "عنوان و شناسه خریدار الزامی است" }, { status: 400 });
@@ -70,7 +72,7 @@ export async function POST(req: Request) {
         quantity: Number(quantity) || 1,
         unit: unit || 'عدد',
         buyerId: buyerId,
-        categoryId: categoryId || null // 👈 اضافه شد
+        categoryId: categoryId || null
       }
     });
 
